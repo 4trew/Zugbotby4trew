@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: green;
+            background-color: red;
             color: white;
             white-space: pre-wrap;
         }
@@ -54,60 +54,60 @@
                 .then(function(data) {
                     displayFahrplan(data);
                     console.log("Rohdaten:", data);
-                    saveFahrplan(data); // Call the function to save the data
                 })
                 .catch(function(error) {
-                    console.error("Fehler beim Abrufen des Fahrplans:", error);
+                    console.error("Fehler:", error);
                 });
         }
 
         function displayFahrplan(data) {
             var table = document.getElementById("fahrplanTable");
-            table.innerHTML = ""; // Tabelle leeren
+            table.innerHTML = "";
+
+            var headerRow = document.createElement("tr");
+            var headerFields = ["Zugnummer", "Bahnhof", "Loknummer", "Ankunft", "Abfahrt"];
+
+            for (var i = 0; i < headerFields.length; i++) {
+                var headerCell = document.createElement("th");
+                headerCell.textContent = headerFields[i];
+                headerRow.appendChild(headerCell);
+            }
+
+            table.appendChild(headerRow);
 
             for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                var zugnummer = row.train_number.trim();
-                var bahnhof = row.name.trim();
-                var loknummer = row.unit_number.trim();
-                var ankunft = row.arrival ? new Date(row.arrival).toLocaleString() : "";
-                var abfahrt = row.departure ? new Date(row.departure).toLocaleString() : "";
+                var row = document.createElement("tr");
 
-                var newRow = table.insertRow();
-                var zugnummerCell = newRow.insertCell(0);
-                var bahnhofCell = newRow.insertCell(1);
-                var loknummerCell = newRow.insertCell(2);
-                var ankunftCell = newRow.insertCell(3);
-                var abfahrtCell = newRow.insertCell(4);
+                var trainNumberCell = document.createElement("td");
+                trainNumberCell.textContent = data[i].train_number || "";
+                row.appendChild(trainNumberCell);
 
-                zugnummerCell.innerHTML = zugnummer;
-                bahnhofCell.innerHTML = bahnhof;
-                loknummerCell.innerHTML = loknummer;
-                ankunftCell.innerHTML = ankunft;
-                abfahrtCell.innerHTML = abfahrt;
+                var nameCell = document.createElement("td");
+                nameCell.textContent = data[i].name || "";
+                row.appendChild(nameCell);
+
+                var unitNumberCell = document.createElement("td");
+                unitNumberCell.textContent = data[i].unit_number || "";
+                row.appendChild(unitNumberCell);
+
+                var arrivalCell = document.createElement("td");
+                arrivalCell.textContent = formatDateTime(data[i].arrival);
+                row.appendChild(arrivalCell);
+
+                var departureCell = document.createElement("td");
+                departureCell.textContent = formatDateTime(data[i].departure);
+                row.appendChild(departureCell);
+
+                table.appendChild(row);
             }
         }
 
-        function saveFahrplan(data) {
-            var jsonData = JSON.stringify(data);
-            var url = "http://localhost:5000/save-fahrplan"; // Change the URL to your Python server endpoint for saving the data
-
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: jsonData
-            })
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(result) {
-                    console.log("Fahrplan erfolgreich gespeichert:", result);
-                })
-                .catch(function(error) {
-                    console.error("Fehler beim Speichern des Fahrplans:", error);
-                });
+        function formatDateTime(dateTimeString) {
+            if (dateTimeString) {
+                var date = new Date(dateTimeString.replace("Z", "+00:00"));
+                return date.toLocaleString("de-DE");
+            }
+            return "";
         }
     </script>
 </body>
