@@ -3,12 +3,14 @@
 <head>
     <title>Fahrplan</title>
     <style>
-        #console {
+        #console-container {
             width: 80%;
             margin: 0 auto;
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
+            background-color: black;
+            color: white;
             white-space: pre-wrap;
         }
     </style>
@@ -33,7 +35,9 @@
         </tr>
     </table>
 
-    <pre id="console"></pre>
+    <div id="console-container">
+        <pre id="console">Konsole für Fehlerbehebung</pre>
+    </div>
 
     <script>
         function getFahrplan() {
@@ -77,9 +81,6 @@
                         ankunftCell.innerHTML = data[i].arrival || "";
                         abfahrtCell.innerHTML = data[i].departure || "";
                     }
-
-                    var consoleOutput = JSON.stringify(data, null, 2);
-                    document.getElementById("console").textContent = consoleOutput; // Ausgabe in der Konsole anzeigen
                 }
             };
             xhttp.open("GET", url, true);
