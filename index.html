@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: red;
+            background-color: black;
             color: white;
             white-space: pre-wrap;
         }
@@ -50,7 +50,9 @@
             xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
+                    var htmlCode = xhr.responseText;
+                    console.log(htmlCode);
+                    var data = JSON.parse(htmlCode);
                     displayFahrplan(data);
                 }
             };
