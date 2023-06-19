@@ -85,6 +85,15 @@
             }
         }
 
+        // Funktion zum Zurücksetzen der Eingabefelder
+        function resetFields() {
+            document.getElementById("loktyp").value = "";
+            document.getElementById("loknummer").value = "";
+        }
+
+        // Beim Laden der Seite Eingabefelder zurücksetzen
+        window.onload = resetFields;
+
         // Testnachricht in die Konsole
         console.log("Konsole zur Fehlerbehebung");
     </script>
