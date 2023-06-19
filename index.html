@@ -41,8 +41,13 @@
 
     <script>
         function getFahrplan() {
+            var loktyp = document.getElementById("loktyp").value;
+            var loknummer = document.getElementById("loknummer").value;
+
+            var url = "https://konzern-apps.web.oebb.at/lok/index/" + loktyp + ".0" + loknummer;
+
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://konzern.webapps.net/fahrplan", true);
+            xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var data = JSON.parse(xhr.responseText);
