@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: red;
+            background-color: black;
             color: white;
             white-space: pre-wrap;
         }
@@ -64,11 +64,11 @@
 
             for (var i = 0; i < data.length; i++) {
                 var row = data[i];
-                var zugnummer = row.train_number;
-                var bahnhof = row.name;
-                var loknummer = row.unit_number;
-                var ankunft = row.arrival;
-                var abfahrt = row.departure;
+                var zugnummer = row.train_number.trim();
+                var bahnhof = row.name.trim();
+                var loknummer = row.unit_number.trim();
+                var ankunft = row.arrival ? new Date(row.arrival).toLocaleString() : "";
+                var abfahrt = row.departure ? new Date(row.departure).toLocaleString() : "";
 
                 var newRow = table.insertRow();
                 var zugnummerCell = newRow.insertCell(0);
@@ -84,15 +84,6 @@
                 abfahrtCell.innerHTML = abfahrt;
             }
         }
-
-        // Funktion zum Zurücksetzen der Eingabefelder
-        function resetFields() {
-            document.getElementById("loktyp").value = "";
-            document.getElementById("loknummer").value = "";
-        }
-
-        // Beim Laden der Seite Eingabefelder zurücksetzen
-        window.onload = resetFields;
 
         // Testnachricht in die Konsole
         console.log("Konsole zur Fehlerbehebung");
