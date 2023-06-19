@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: red;
+            background-color: green;
             color: white;
             white-space: pre-wrap;
         }
@@ -54,6 +54,7 @@
                 .then(function(data) {
                     displayFahrplan(data);
                     console.log("Rohdaten:", data);
+                    saveFahrplan(data); // Call the function to save the data
                 })
                 .catch(function(error) {
                     console.error("Fehler beim Abrufen des Fahrplans:", error);
@@ -87,8 +88,27 @@
             }
         }
 
-        // Testnachricht in die Konsole
-        console.log("Konsole zur Fehlerbehebung");
+        function saveFahrplan(data) {
+            var jsonData = JSON.stringify(data);
+            var url = "http://localhost:5000/save-fahrplan"; // Change the URL to your Python server endpoint for saving the data
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: jsonData
+            })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(result) {
+                    console.log("Fahrplan erfolgreich gespeichert:", result);
+                })
+                .catch(function(error) {
+                    console.error("Fehler beim Speichern des Fahrplans:", error);
+                });
+        }
     </script>
 </body>
 </html>
