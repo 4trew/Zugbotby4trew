@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fahrplan</title>
+</head>
+<body>
+    <h1>Fahrplan</h1>
+    <form>
+        <label for="loktyp">Loktyp:</label>
+        <input type="text" id="loktyp" name="loktyp"><br><br>
+        <label for="loknummer">Loknummer:</label>
+        <input type="text" id="loknummer" name="loknummer"><br><br>
+        <button type="button" onclick="getFahrplan()">Fahrplan anzeigen</button>
+    </form>
+
+    <table id="fahrplanTable">
+        <tr>
+            <th>Zugnummer</th>
+            <th>Bahnhof</th>
+            <th>Loknummer</th>
+            <th>Ankunft</th>
+            <th>Abfahrt</th>
+        </tr>
+    </table>
+
+    <script>
+        function getFahrplan() {
+            var loktyp = document.getElementById("loktyp").value;
+            var loknummer = document.getElementById("loknummer").value;
+
+            var url = "https://konzern-apps.web.oebb.at/lok/index/" + loktyp + ".0" + loknummer;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+
+                    var table = document.getElementById("fahrplanTable");
+
+                    for (var i = 0; i < data.length; i++) {
+                        var row = table.insertRow();
+                        var zugnummerCell = row.insertCell(0);
+                        var bahnhofCell = row.insertCell(1);
+                        var loknummerCell = row.insertCell(2);
+                        var ankunftCell = row.insertCell(3);
+                        var abfahrtCell = row.insertCell(4);
+
+                        var departure = data[i].departure;
+                        if (departure) {
+                            var departureTime = new Date(departure.replace("Z", "+00:00"));
+                            departureTime.setHours(departureTime.getHours() + 2);
+                            data[i].departure = departureTime.toISOString().replace("2023-", "").replace("T", " ").substr(0, 16);
+                        }
+
+                        var arrival = data[i].arrival;
+                        if (arrival) {
+                            var arrivalTime = new Date(arrival.replace("Z", "+00:00"));
+                            arrivalTime.setHours(arrivalTime.getHours() + 2);
+                            data[i].arrival = arrivalTime.toISOString().replace("2023-", "").replace("T", " ").substr(0, 16);
+                        }
+
+                        zugnummerCell.innerHTML = data[i].train_number || "";
+                        bahnhofCell.innerHTML = data[i].name || "";
+                        loknummerCell.innerHTML = data[i].unit_number || "";
+                        ankunftCell.innerHTML = data[i].arrival || "";
+                        abfahrtCell.innerHTML = data[i].departure || "";
+                    }
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
