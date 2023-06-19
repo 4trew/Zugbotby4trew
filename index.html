@@ -2,6 +2,16 @@
 <html>
 <head>
     <title>Fahrplan</title>
+    <style>
+        #console {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
     <h1>Fahrplan</h1>
@@ -23,6 +33,8 @@
         </tr>
     </table>
 
+    <pre id="console"></pre>
+
     <script>
         function getFahrplan() {
             var loktyp = document.getElementById("loktyp").value;
@@ -33,6 +45,7 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var data = JSON.parse(this.responseText);
+                    console.log(data); // HTML-Daten in der Konsole ausgeben
 
                     var table = document.getElementById("fahrplanTable");
 
@@ -64,6 +77,9 @@
                         ankunftCell.innerHTML = data[i].arrival || "";
                         abfahrtCell.innerHTML = data[i].departure || "";
                     }
+
+                    var consoleOutput = JSON.stringify(data, null, 2);
+                    document.getElementById("console").textContent = consoleOutput; // Ausgabe in der Konsole anzeigen
                 }
             };
             xhttp.open("GET", url, true);
