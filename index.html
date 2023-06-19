@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: red;
+            background-color: cyan;
             color: white;
             white-space: pre-wrap;
         }
@@ -47,17 +47,9 @@
             var url = "https://konzern-apps.web.oebb.at/lok/index/" + loktyp + ".0" + loknummer;
             console.log("URL:", url);
 
-            fetch(url, { mode: "cors" })
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    displayFahrplan(data);
-                    console.log("Rohdaten:", data);
-                })
-                .catch(function(error) {
-                    console.error("Fehler:", error);
-                });
+            var script = document.createElement("script");
+            script.src = url + "?callback=displayFahrplan"; // Der Parameter "callback" gibt die Callback-Funktion an
+            document.body.appendChild(script);
         }
 
         function displayFahrplan(data) {
