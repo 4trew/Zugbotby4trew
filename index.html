@@ -9,7 +9,7 @@
             border: 1px solid black;
             padding: 10px;
             margin-top: 20px;
-            background-color: black;
+            background-color: green;
             color: white;
             white-space: pre-wrap;
         }
@@ -24,16 +24,6 @@
         <input type="text" id="loknummer" name="loknummer" value=""><br><br>
         <button type="button" onclick="getFahrplan()">Fahrplan anzeigen</button>
     </form>
-
-    <table id="fahrplanTable">
-        <tr>
-            <th>Zugnummer</th>
-            <th>Bahnhof</th>
-            <th>Loknummer</th>
-            <th>Ankunft</th>
-            <th>Abfahrt</th>
-        </tr>
-    </table>
 
     <div id="console-container">
         <pre id="console">Konsole zur Fehlerbehebung</pre>
@@ -52,41 +42,11 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var data = JSON.parse(xhr.responseText);
-                    displayFahrplan(data);
+                    console.log("JSON Code:", data);
                 }
             };
             xhr.send();
         }
-
-        function displayFahrplan(data) {
-            var table = document.getElementById("fahrplanTable");
-            table.innerHTML = ""; // Tabelle leeren
-
-            for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                var zugnummer = row.train_number.trim();
-                var bahnhof = row.name.trim();
-                var loknummer = row.unit_number.trim();
-                var ankunft = row.arrival ? new Date(row.arrival).toLocaleString() : "";
-                var abfahrt = row.departure ? new Date(row.departure).toLocaleString() : "";
-
-                var newRow = table.insertRow();
-                var zugnummerCell = newRow.insertCell(0);
-                var bahnhofCell = newRow.insertCell(1);
-                var loknummerCell = newRow.insertCell(2);
-                var ankunftCell = newRow.insertCell(3);
-                var abfahrtCell = newRow.insertCell(4);
-
-                zugnummerCell.innerHTML = zugnummer;
-                bahnhofCell.innerHTML = bahnhof;
-                loknummerCell.innerHTML = loknummer;
-                ankunftCell.innerHTML = ankunft;
-                abfahrtCell.innerHTML = abfahrt;
-            }
-        }
-
-        // Testnachricht in die Konsole
-        console.log("Konsole zur Fehlerbehebung");
     </script>
 </body>
 </html>
